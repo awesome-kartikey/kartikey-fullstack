@@ -1,0 +1,3 @@
+Hello Git!
+This is a test file to practice staging and committing.
+I will use this file to test `git diff` by changing this line later.
