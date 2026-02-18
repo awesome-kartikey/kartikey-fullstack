@@ -1,0 +1,6 @@
+INFO: server started
+ERROR: connection refused
+INFO: request received
+ERROR: timeout
+INFO: all good
+ERROR: disk full
