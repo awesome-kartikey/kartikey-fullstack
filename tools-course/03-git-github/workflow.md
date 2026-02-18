@@ -23,10 +23,10 @@ To understand what happened in the past:
 
 ## Comit Message Format
 
- -  `feat`: New feature
- -  `fix`: Bug fix
- -  `docs`: Documentation changes
- -  `style`: Formatting, missing semi colons, etc.
- -  `refactor`: Refactoring code, renaming things
- -  `test`: Adding missing tests, refactoring tests.
- -  `chore`: Updating build tasks, package manager configs, etc.
+ -  **`feat`**: New feature
+ -  **`fix`**: Bug fix
+ -  **`docs`**: Documentation changes
+ -  **`style`**: Formatting, missing semi colons, etc.
+ -  **`refactor`**: Refactoring code, renaming things
+ -  **`test`**: Adding missing tests, refactoring tests.
+ -  **`chore`**: Updating build tasks, package manager configs, etc.
