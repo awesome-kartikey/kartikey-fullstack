@@ -16,6 +16,17 @@ I will follow this loop for every feature or fix:
 
 ## Inspecting History
 To understand what happened in the past:
+
 - **`git log`**: Shows a list of recent commits (hash, author, date, message).
 - **`git diff`**: Shows exactly what lines changed before I stage them.
 - **`git show <commit-hash>`**: Shows the specific changes in a past commit.
+
+## Comit Message Format
+
+ -  `feat`: New feature
+ -  `fix`: Bug fix
+ -  `docs`: Documentation changes
+ -  `style`: Formatting, missing semi colons, etc.
+ -  `refactor`: Refactoring code, renaming things
+ -  `test`: Adding missing tests, refactoring tests.
+ -  `chore`: Updating build tasks, package manager configs, etc.
