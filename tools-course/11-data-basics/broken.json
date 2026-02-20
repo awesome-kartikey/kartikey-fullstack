@@ -1,0 +1,16 @@
+[
+  {
+    "id": "usr_001",
+    "name": "Alex Chen",
+    "email": "alex@example.com",
+    "roles": ["developer", "mentor"],
+    "active": true
+  },
+  {
+    "id": "usr_002",
+    "name": "Sam Rivera",
+    "email": "sam@example.com",
+    "roles": ["designer"],
+    "active": false
+  }
+]

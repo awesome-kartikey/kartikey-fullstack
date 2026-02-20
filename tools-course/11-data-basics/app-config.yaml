@@ -1,0 +1,21 @@
+app:
+  name: "user-management-system"
+  version: "1.2.0"
+  debug: true
+
+server:
+  host: "localhost"
+  ports:
+    - 3000
+    - 3001
+  ssl_enabled: false
+
+database:
+  type: "postgresql"
+  max_connections: 10
+  timeout: 30
+
+features:
+  - user_registration
+  - email_notifications
+  - file_uploads

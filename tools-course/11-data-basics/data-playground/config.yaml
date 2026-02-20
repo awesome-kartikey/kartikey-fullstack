@@ -1,0 +1,68 @@
+person:
+  name: Kartikey
+  language: [JavaScript, Python, C++]
+  description: |
+    Hello! I'm Kartikey, a passionate JavaScript developer with a love for building dynamic web applications.
+  hobbies:
+    - Coding
+    - Reading tech blogs
+  social_media:
+    github: https://www.github.com/kartikey
+    linkedin: https://www.linkedin.com/in/kartikey
+    twitter: https://www.twitter.com/kartikey
+  notes: >
+    This text 
+    becomes a single line.
+  time:  2025-12-15 10:30:00
+--- 
+
+# Basic Data Types
+
+number: 42
+is_active: true
+is_admin: false
+nickname: null
+items:
+  - name: Item 1
+    price: 19.99
+    in_stock: true
+  - name: Item 2
+    price: 29.99
+    in_stock: false
+  - name: Item 3
+    price: 9.99
+    in_stock: true
+dict_example:
+  key1: value1
+  key2: value2
+  key3:
+    subkey1: subvalue1
+    subkey2: subvalue2
+
+---
+# Anchors and Aliases
+defaults: &defaultSettings
+  retries: 3
+  timeout: 30
+
+serviceA:
+  <<: *defaultSettings
+  port: 8080
+
+serviceB:
+  <<: *defaultSettings
+  port: 9000
+
+---
+# Explicit Data Types
+zip_code: !!string 12345
+count: !!int "100"
+pi_value: !!float "3.14159"
+is_enabled: !!bool "true"
+
+---
+# Complex Mapping Keys
+? [A2, A3]
+: PawnForward
+? [B1, C3]
+: KnightMove

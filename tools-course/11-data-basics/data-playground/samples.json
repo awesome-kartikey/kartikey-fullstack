@@ -1,0 +1,24 @@
+[
+  {
+  "id" : 1,
+  "name" : "Kartikey Kumar",
+  "skills" : [ "JavaScript", "TypeScript", "Python", "C++", "React", "Node.js", "Next.js" ],
+  "profile": {
+    "location": "India"  
+  },
+  "active": true
+},
+{
+  "string-example": "This is a sample string",
+  "number-example": 42,
+  "boolean-example": false,
+  "array-example": [1, 2, 3, 4, 5],
+  "object-example": {
+    "key1": "value1",
+    "nested-object": {
+      "nested-key": "nested-value"
+    }
+  },
+  "null-example" : null
+}
+]

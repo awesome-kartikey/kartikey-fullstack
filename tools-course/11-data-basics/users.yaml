@@ -1,0 +1,16 @@
+# The top-level array in JSON becomes a list of objects in YAML
+- id: usr_001
+  name: Alex Chen
+  email: alex@example.com
+  # The inner array (roles) is represented using hyphens and further indentation
+  roles:
+    - developer
+    - mentor
+  active: true
+  
+- id: usr_002
+  name: Sam Rivera
+  email: sam@example.com
+  roles:
+    - designer
+  active: false

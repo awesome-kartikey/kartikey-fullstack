@@ -1,0 +1,173 @@
+How JWT Works
+
+By: Kartikey Kumar Date: December 2025
+
+------------------------------------------------------------------------
+
+Summary
+
+JWT is a token the server gives you after login. You send this token
+with your requests so the server knows who you are. The server does not
+store session data; it only checks the token.
+
+------------------------------------------------------------------------
+
+Introduction
+
+Audience: Beginners learning authentication. Goal: Understand what JWT
+is and how it is used in login flows. What’s inside:
+
+-   What a JWT looks like
+-   Login flow
+-   Protected routes
+-   Architecture
+-   Simple code in Node.js
+
+You should already know what an API is and how requests work.
+
+------------------------------------------------------------------------
+
+Background
+
+JWT is used because older session-based systems were difficult to scale.
+With many users and multiple servers, storing sessions became a problem.
+JWT keeps things stateless, so the server only verifies the token. This
+information is valid for most modern web apps and APIs.
+
+------------------------------------------------------------------------
+
+Mindmap
+
+[jwt-mindmap]
+
+------------------------------------------------------------------------
+
+What a JWT Looks Like
+
+Example token:
+
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIn0.Tm9kdUxvZ0luU2lnbmF0dXJl
+
+A JWT has 3 parts:
+
+1.  Header
+2.  Payload
+3.  Signature
+
+The parts are separated by dots.
+
+------------------------------------------------------------------------
+
+Login Flow (How JWT Is Created)
+
+Mermaid Diagram 1
+
+    sequenceDiagram
+        participant User
+        participant Browser
+        participant Server
+        participant Database
+        
+        User->>Browser: Enter email + password
+        Browser->>Server: Send login request
+        Server->>Database: Check user
+        Database-->>Server: User found
+        Server->>Server: Create JWT
+        Server-->>Browser: Send token
+        Browser->>Browser: Save token
+
+Steps (simple words)
+
+1.  User logs in
+2.  Server checks the user
+3.  Server creates a JWT
+4.  Browser stores it
+5.  User is logged in
+
+------------------------------------------------------------------------
+
+Protected Route Flow (Using the Token)
+
+Mermaid Diagram 2
+
+    flowchart TD
+        Start([Visit Protected Page]) --> Check{Has Token?}
+        Check -->|No| Login[Go to Login Page]
+        Check -->|Yes| Send[Send Token to Server]
+        Send --> Verify{Token Valid?}
+        Verify -->|No| Error[Show Error / Redirect]
+        Verify -->|Yes| Allow[Allow Access]
+
+What happens
+
+-   If token is missing → user goes to login
+-   If token is there → server checks it
+-   If valid → access allowed
+-   If expired → ask user to log in again
+
+------------------------------------------------------------------------
+
+Architecture Overview
+
+[]
+
+Flow:
+
+-   Browser sends token in the header
+-   API receives request
+-   Backend checks signature
+-   If OK → fetch data → send response
+
+------------------------------------------------------------------------
+
+Code Example (Node.js)
+
+Creating a token
+
+    const jwt = require("jsonwebtoken");
+
+    function generateToken(user) {
+      const payload = { userId: user.id };
+      const secret = process.env.JWT_SECRET;
+
+      return jwt.sign(payload, secret, { expiresIn: "1h" });
+    }
+
+Verifying token
+
+    function verifyToken(req, res, next) {
+      const header = req.headers["authorization"];
+      const token = header && header.split(" ")[1];
+
+      if (!token) return res.status(401).json({ error: "No token" });
+
+      try {
+        const secret = process.env.JWT_SECRET;
+        const decoded = jwt.verify(token, secret);
+        req.user = decoded;
+        next();
+      } catch (err) {
+        return res.status(403).json({ error: "Invalid token" });
+      }
+    }
+
+------------------------------------------------------------------------
+
+Ending
+
+You learned:
+
+-   What JWT is
+-   Why it’s used
+-   How login works with JWT
+-   How protected routes work
+-   Basic architecture
+-   Small code example
+
+Next steps:
+
+-   Learn about refresh tokens
+-   Learn secure cookie storage
+-   Learn JWT best practices
+
+------------------------------------------------------------------------
