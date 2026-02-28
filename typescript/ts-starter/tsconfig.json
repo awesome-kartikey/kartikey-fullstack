@@ -13,7 +13,9 @@
     "useDefineForClassFields": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": { "@shared/*": ["src/shared/*"] }
   },
   "include": ["src"]
 }
