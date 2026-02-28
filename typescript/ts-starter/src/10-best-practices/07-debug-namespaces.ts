@@ -1,0 +1,1 @@
+// Debug namespaces: Add debug() traces to two modules (app:users and app:repo). Run with DEBUG=app:* to verify only those traces print, while leaving business logs to pino. Demonstrate toggling traces without code changes.
