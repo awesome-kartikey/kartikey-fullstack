@@ -1,7 +1,7 @@
 // 1. Create let value: unknown = "hello".
 
 let value: unknown = "hello world";
-// console.log(unknown_value.toUpperCase());
+// console.log(value.toUpperCase());
 
 /*---------------------------------------*/
 // 2. Use value as string to get its length.
@@ -19,9 +19,10 @@ console.log(length2.length);
 
 let someValue: unknown = "hello";
 let numberValue = someValue as number;
-console.log(numberValue);
+console.log("numberValue:", numberValue);
+console.log("Type of numberValue:", typeof numberValue); //Why it is string not number?
 
-// The problem: TypeScript trusts you!
+// The problem: TypeScript trusts you
 // Type assertions bypass safety checks
 
 /*---------------------------------------*/

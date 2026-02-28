@@ -6,7 +6,7 @@
 
 let anyValue: any = "hello";
 
-console.log("Initial:", anyValue);
+console.log("Initial any:", anyValue);
 anyValue = 123;
 anyValue = true;
 
@@ -17,7 +17,7 @@ anyValue = true;
 
 let unknownValue: unknown = "hello";
 
-console.log("Initial:", unknownValue);
+console.log("Initial unknown:", unknownValue);
 unknownValue = 123;
 unknownValue = true;
 // console.log(unknownValue.toUpperCase());

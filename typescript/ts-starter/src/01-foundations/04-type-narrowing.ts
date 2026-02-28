@@ -23,7 +23,7 @@ function processDate(input: Date | string): string {
   if (input instanceof Date) {
     return input.toISOString();
   }
-  return input;
+  return `I am a String: ${input}`;
 }
 
 console.log(processDate(new Date()));
@@ -36,9 +36,9 @@ function printValues(input: string | string[]): void {
   if (Array.isArray(input)) {
     console.log(`Array length: ${input.length}`);
   } else {
-    console.log(`String Length: ${input.length}`);
+    console.log(`I am String: ${input}`);
   }
 }
 
-printValues("Single value");
+printValues("Stringggggg");
 printValues(["First", "Second", "Third"]);
