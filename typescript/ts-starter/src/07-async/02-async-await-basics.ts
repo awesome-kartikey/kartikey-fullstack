@@ -7,7 +7,7 @@ type AsyncUser = {
   name: string;
 };
 
-async function fetchUser(id: string): Promise<AsyncUser> {
+async function fetchUser2(id: string): Promise<AsyncUser> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ id, name: "John" });
@@ -16,8 +16,8 @@ async function fetchUser(id: string): Promise<AsyncUser> {
 }
 
 async function showUser() {
-  const user1 = await fetchUser("123"); // Type is user1 : AsyncUser
-  const user2 = fetchUser("123"); // Type is Promise<AsyncUser>
+  const user1 = await fetchUser2("123"); // Type is user1 : AsyncUser
+  const user2 = fetchUser2("123"); // Type is Promise<AsyncUser>
   console.log(user1, user2);
 }
 

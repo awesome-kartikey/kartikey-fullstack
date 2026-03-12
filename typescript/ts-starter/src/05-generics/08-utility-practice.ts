@@ -17,5 +17,5 @@ type UserId = Pick<UtilityUser, "id">;
 type UserWithoutAge = Omit<UtilityUser, "age">;
 
 function pluck<T, K extends keyof T>(objs: T[], key: K): T[K][] {
-  return [];
+  return objs.map((obj) => obj[key]);
 }

@@ -1,0 +1,2 @@
+dbPath: .data/app.db
+logLevel: info

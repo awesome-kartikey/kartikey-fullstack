@@ -1,19 +1,24 @@
-// Immutable update: Start with a function that mutates an array of users. Rewrite it to use spreads and readonly arrays. Demonstrate that consumers of the function cannot accidentally modify shared state.
+// Immutable update: Start with a function that mutates an array of immutable_users. Rewrite it to use spreads and readonly arrays. Demonstrate that consumers of the function cannot accidentally modify shared state.
 
-function updateUsers(users: User[], newUser: User) {
-  users.push(newUser);
-  return users;
+type User20 = {
+  id: number;
+  name: string;
+  age: number;
+};
+function updateUsers(immutable_users: User20[], newUser: User20) {
+  immutable_users.push(newUser);
+  return immutable_users;
 }
 
 /*******************************************************************************/
 
-function updateUsers2(users: readonly User[], newUser: User): User[] {
-  return [...users, newUser];
+function updateUsers2(immutable_users: readonly User20[], newUser: User20): User20[] {
+  return [...immutable_users, newUser];
 }
 
-const users: readonly User[] = [
+const immutable_users: readonly User20[] = [
   {
-    id: "1",
+    id: 1,
     name: "Alice",
     age: 30,
   },

@@ -24,6 +24,13 @@ bus.on("user:created", ({ id, email }) => {
   console.log(`User ${id} created with email ${email}`);
 });
 
+bus.on("user:updated", (user) => {
+  console.log(`[Event Subscriber] User ${user.id} was just updated.`);
+});
+
+updateUser("123", "alice@example.com");
+
+
 //Emitter
 function updateUser(id: string, email: string) {
   bus.emit("user:updated", { id, email });

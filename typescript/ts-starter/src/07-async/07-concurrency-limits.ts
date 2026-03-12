@@ -1,5 +1,5 @@
 // Implement a simple Semaphore with acquire() / release().
-// Write runWithLimit<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]>.
+// Write runWithLimit2<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]>.
 // Validate that only limit tasks run concurrently.
 
 const sleep5 = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,7 +21,7 @@ class Semaphore {
   }
 }
 
-async function runWithLimit<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]> {
+async function runWithLimit2<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]> {
   const semaphore = new Semaphore(limit);
 
   return Promise.all(
@@ -36,14 +36,14 @@ async function runWithLimit<T>(limit: number, tasks: (() => Promise<T>)[]): Prom
   );
 }
 
-async function fetchUser(id: string): Promise<string> {
-  console.log(`fetchUser(${id}) started at ${Date.now()}`);
+async function fetchUser3(id: string): Promise<string> {
+  console.log(`fetchUser3(${id}) started at ${Date.now()}`);
   await sleep5(1000);
   return `User_${id}`;
 }
 
-const tasks = [() => fetchUser("1"), () => fetchUser("2"), () => fetchUser("3")];
+const tasks = [() => fetchUser3("1"), () => fetchUser3("2"), () => fetchUser3("3")];
 
-runWithLimit(2, tasks)
+runWithLimit2(2, tasks)
   .then((results) => console.log(results))
   .catch((err) => console.log(err));

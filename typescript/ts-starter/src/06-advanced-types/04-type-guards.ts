@@ -1,6 +1,5 @@
 // Write function isCircle(s: Shape): s is { kind: "circle"; radius: number }.
 // Use it in area function instead of switch.
-// Try narrowing it manually using `in` operator. ????
 
 type Shape2 = { kind: "circle"; radius: number } | { kind: "square"; size: number };
 
@@ -25,3 +24,12 @@ function area2(shape: Shape2): number {
 
 area2({ kind: "circle", radius: 5 });
 area2({ kind: "square", size: 10 });
+
+// Try narrowing it manually using `in` operator.
+function handleShapeArea(shape: Shape) {
+  if ("radius" in shape) {
+    console.log("Circle radius:", shape.radius);
+  } else if ("sideLength" in shape) {
+    console.log("Square side:", shape.sideLength);
+  }
+}
