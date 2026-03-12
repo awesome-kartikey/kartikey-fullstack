@@ -1,21 +1,19 @@
-// New functionality:
+export type CommandHandler = (args?: any) => Promise<void> | void;
 
-// Modular plugin architecture
-// External integrations
-// Workspace management
+export interface PluginHooks {
+  onInit?: () => void;
+  beforeCommand?: (cmd: string) => void;
+}
 
-// export interface TaskPlugin {
-//   name: string;
-//   version: string;
-//   commands?: PluginCommand[];
-//   hooks?: PluginHooks;
-// }
+export interface PluginCommand {
+  name: string;
+  description: string;
+  handler: CommandHandler;
+}
 
-// export interface PluginCommand {
-//   name: string;
-//   description: string;
-//   handler: CommandHandler;
-// }
-
-// // plugins/reporting/index.ts
-// // plugins/github-sync/index.ts
+export interface TaskPlugin {
+  name: string;
+  version: string;
+  commands?: PluginCommand[];
+  hooks?: PluginHooks;
+}

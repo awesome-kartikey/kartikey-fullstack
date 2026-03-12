@@ -1,23 +1,19 @@
-// New functionality:
+import chalk from "chalk";
 
-// Comprehensive error handling
-// Logging system
-// Input validation
-// Performance monitoring
+export type LogLevel = "info" | "warn" | "error";
 
-// export class Logger {
-//   constructor(private level: LogLevel);
+export class Logger {
+  constructor(private level: LogLevel = "info") {}
 
-//   info(message: string, context?: object): void;
-//   warn(message: string, context?: object): void;
-//   error(error: Error, context?: object): void;
-// }
+  info(message: string, context?: object): void {
+    if (this.level === "info") console.log(chalk.blue("ℹ ") + message, context || "");
+  }
 
-// // src/errors.ts
-// export class TaskError extends Error {
-//   constructor(
-//     message: string,
-//     public code: TaskErrorCode,
-//     public context?: object
-//   );
-// }
+  warn(message: string, context?: object): void {
+    if (this.level !== "error") console.log(chalk.yellow("⚠ ") + message, context || "");
+  }
+
+  error(error: Error, context?: object): void {
+    console.error(chalk.red("✖ ") + error.message, context || "");
+  }
+}

@@ -1,12 +1,8 @@
-import { close } from "node:fs";
-import type { Task, Priority } from "./types";
-import { createTask, markCompleted, filterByStatus, sortByPriority } from "./operations";
+#!/usr/bin/env node
+import { TaskManager } from "./TaskManager.js";
+import { TaskCLI } from "./cli.js";
 
-const tasks = [
-  createTask("Buy groceries", "high"),
-  createTask("Do laundry", "low"),
-  createTask("Study TypeScript", "high"),
-  createTask("Clean room", "medium"),
-];
+const manager = new TaskManager();
+const cli = new TaskCLI(manager);
 
-console.log("All Tasks:", tasks);
+cli.run(process.argv).catch(console.error);

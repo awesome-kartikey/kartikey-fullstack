@@ -1,10 +1,10 @@
 export interface Task {
-  id: string;                           //Unique-value
-  title: string;                        //Description
-  completed: boolean;                   //Completed or Not(True/False)
-  priority: "low" | "medium" | "high";  // How important is it, sorting
-  createdAt: Date;                      // When it was created
+  id: string;
+  title: string;
+  completed: boolean;
+  priority: 'low' | 'medium' | 'high';
+  createdAt: Date;
 }
 
-export type TaskStatus = "pending" | "in-progress" | "completed";
-export type Priority = Task["priority"]
+export type TaskStatus = 'pending' | 'in-progress' | 'completed';
+export type Priority = Task['priority'];

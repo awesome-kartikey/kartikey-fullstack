@@ -1,0 +1,23 @@
+{
+  "tasks": [
+    {
+      "title": "Buy groceries",
+      "completed": false,
+      "priority": "high",
+      "id": "da5de9cc-d4f2-476f-8997-62ddf70af3cd",
+      "createdAt": "2026-03-08T18:36:00.179Z"
+    },
+    {
+      "title": "Buy groceries",
+      "completed": false,
+      "priority": "high",
+      "id": "97293b4e-8cab-41a4-a1f7-eab921f37aad",
+      "createdAt": "2026-03-08T18:36:00.179Z"
+    }
+  ],
+  "metadata": {
+    "total": 2,
+    "completed": 0,
+    "lastModified": "2026-03-08T18:36:00.181Z"
+  }
+}
