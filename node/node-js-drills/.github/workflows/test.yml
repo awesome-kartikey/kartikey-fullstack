@@ -1,0 +1,26 @@
+name: Test & Quality
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Linter
+        run: pnpm lint
+
+      - name: Run Tests with Coverage
+        run: pnpm test:coverage

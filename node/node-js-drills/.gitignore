@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+.env
+.DS_Store
+oneMB.txt
+upper.txt
+upper-readfile.txt
+app.db

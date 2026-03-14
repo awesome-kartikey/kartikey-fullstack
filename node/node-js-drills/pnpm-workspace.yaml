@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - '@scarf/scarf'
+  - bcrypt
+  - better-sqlite3
+  - esbuild
