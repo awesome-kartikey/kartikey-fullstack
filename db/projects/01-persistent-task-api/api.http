@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:3000
+
+### Create User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "email": "apiuser@test.com"
+}
+
+### Create Task for User 1 (Make sure ID matches the created user)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Complete backend project",
+  "userId": 1
+}
+
+### Get Tasks for User 1
+GET {{baseUrl}}/users/1/tasks
