@@ -1,0 +1,84 @@
+@baseUrl = http://localhost:3000
+
+### Register user
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "password123"
+}
+
+###
+
+### Register admin
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "email": "admin@test.com", 
+  "password": "supersecret",
+  "role": "admin"
+}
+
+###
+
+### Login user (saves token)
+# @name loginUser
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "password123"
+}
+
+###
+
+@userToken = {{loginUser.response.body.$.token}}
+
+### Login admin (saves token)  
+# @name loginAdmin
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "supersecret"
+}
+
+###
+
+@adminToken = {{loginAdmin.response.body.$.token}}
+
+### Profile no token (401)
+GET {{baseUrl}}/profile
+
+###
+
+### Profile with token (200)
+GET {{baseUrl}}/profile
+Authorization: Bearer {{userToken}}
+
+###
+
+### Admin with user token (403)
+GET {{baseUrl}}/admin
+Authorization: Bearer {{userToken}}
+
+###
+
+### Admin with admin token (200)
+GET {{baseUrl}}/admin
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Rate limit test (run 11x fast → 429)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "hacker@test.com",
+  "password": "wrong"
+}
