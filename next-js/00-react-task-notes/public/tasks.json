@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "title": "Learn React Foundations",
+    "completed": true
+  },
+  {
+    "id": "2",
+    "title": "Build the Next.js Frontend",
+    "completed": false
+  },
+  {
+    "id": "3",
+    "title": "Connect to Node.js Backend",
+    "completed": false
+  }
+]
