@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:3000
+
+### 0. Create a User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Kartikey Developer",
+  "email": "kartikey@example.com",
+  "preferences": {"theme": "dark", "notifications": false}
+}
+
+### 0. Create Tags
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "urgent"
+}
+
+### 0. Create another Tag
+POST {{baseUrl}}/tags
+Content-Type: application/json
+
+{
+  "name": "frontend"
+}
+
+
+### 1. Create a Project (Assuming user ID 1 exists from previous drills)
+POST {{baseUrl}}/projects
+Content-Type: application/json
+
+{
+  "name": "Q3 Launch",
+  "ownerId": 1,
+  "metadata": {"budget": 5000, "client": "Acme Corp"}
+}
+
+### 2. Create a Task (Includes Project ID and Array of Tag IDs)
+# Make sure to create some tags in the DB manually or via script first!
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Design Mockups",
+  "projectId": 1,
+  "assignedTo": 1,
+  "tagIds": [1, 2] 
+}
+
+### 3. Create a Comment on Task ID 1
+POST {{baseUrl}}/comments
+Content-Type: application/json
+
+{
+  "taskId": 1,
+  "authorId": 1,
+  "content": "Here is the first draft."
+}
+
+### 4. Reply to the Comment (Threaded Comment - set parentCommentId)
+POST {{baseUrl}}/comments
+Content-Type: application/json
+
+{
+  "taskId": 1,
+  "authorId": 1,
+  "content": "Looks good, approving it now.",
+  "parentCommentId": 1
+}
