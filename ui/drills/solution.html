@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solution</title>
+  <link rel="stylesheet" href="node_modules/modern-normalize/modern-normalize.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Merriweather:wght@400;700&family=Source+Code+Pro&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+
+<body>
+  <div class="layout">
+    <header>
+      <h1>Movies & Books</h1>
+      <button class="btn-cta" id="theme-toggle">
+        Switch to Dark Mode
+      </button>
+    </header>
+
+    <nav aria-label="Main navigation">
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24"
+          height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+        </svg>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+
+      <ul id="nav-menu" class="nav-menu">
+
+        <li>
+          <a href="#" class="nav-link">
+            <svg aria-hidden="true" class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Home</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="nav-link">
+            <svg aria-hidden="true" class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            <span>Search</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="nav-link">
+            <svg aria-hidden="true" class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+            <span>Settings</span>
+          </a>
+        </li>
+
+      </ul>
+
+      <div class="nav-actions">
+
+        <button class="btn-icon" aria-label="Download reading list">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          <span>Save List</span>
+        </button>
+
+        <button class="btn-icon" aria-label="Upload file">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+          </svg>
+          <span>Upload</span>
+        </button>
+
+      </div>
+
+    </nav>
+
+    <main>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb__item">
+            <a href="#">Home</a>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="#">Articles</a>
+          </li>
+          <li class="breadcrumb__item" aria-current="page">
+            The Art of Storytelling
+          </li>
+        </ol>
+      </nav>
+      <!-- Success alert -->
+      <div class="alert alert--success" role="status" aria-live="polite">
+        <svg class="alert__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <p class="alert__message">Your reading list has been saved successfully.</p>
+      </div>
+
+      <!-- Error alert -->
+      <div class="alert alert--error" role="status" aria-live="polite">
+        <svg class="alert__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        </svg>
+        <p class="alert__message">Something went wrong. Please try again.</p>
+      </div>
+
+
+      <section class="hero" aria-label="Hero banner">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-content">
+          <h2 class="hero-title">Welcome to Movies & Books</h2>
+          <p class="hero-subtitle">Discover stories worth your time.</p>
+          <a href="#movies" class="btn-cta">See Top Picks</a>
+        </div>
+      </section>
+
+      <h2>The Art of Storytelling</h2>
+
+      <article class="article-body">
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio
+          quasi dolorum ab dolores fugit facere illo, aut aliquam id qui
+          impedit sequi! Enim.
+        </p>
+
+        <section id="movies">
+          <h3>Top Rated Movies</h3>
+          <ol>
+            <li>Iron Man (2008)</li>
+            <li>Inception (2010)</li>
+            <li>Interstellar (2014)</li>
+          </ol>
+        </section>
+
+        <section id="books">
+          <h3>Essential Reading List</h3>
+          <ul>
+            <li>Atomic Habits by James Clear</li>
+            <li>The Alchemist by Paulo Coelho</li>
+            <li>So Good They Can't Ignore You by Cal Newport</li>
+          </ul>
+        </section>
+
+        <section id="stats">
+          <h3>Table Status</h3>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Interstellar</th>
+                <td>Sci-Fi</td>
+                <td>9.5</td>
+              </tr>
+              <tr>
+                <th scope="row">The Alchemist</th>
+                <td>Fiction</td>
+                <td>8.8</td>
+              </tr>
+              <tr>
+                <th scope="row">Atomic Habits</th>
+                <td>Self-Help</td>
+                <td>9.2</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <figure>
+          <img src="https://picsum.photos/800/400" alt="Random images in 800x400 resolution" />
+          <figcaption>A scenic landscape — used as the article header image</figcaption>
+        </figure>
+        <p class="highlight">
+          Did you know? Complementary colors sit directly opposite on the color wheel — blue (220°) pairs with orange
+          (40°).
+        </p>
+        <section class="section" aria-label="Featured cards">
+          <h3 class="section__title">Featured Picks</h3>
+          <div class="card-grid">
+
+            <article class="card">
+              <h4>Interstellar</h4>
+              <p>Card</p>
+              <span class="badge badge--genre">Sci-Fi</span>
+            </article>
+
+            <article class="card card--elevated">
+              <h4>Atomic Habits</h4>
+              <p>Elevated Card</p>
+              <span class="badge badge--genre">Self-Help</span>
+            </article>
+
+            <article class="card card--outlined">
+              <h4>The Alchemist</h4>
+              <p>Outlined Card</p>
+              <span class="badge badge--genre">Fiction</span>
+            </article>
+            <article class="card card--compact">
+              <h4>Quick Note</h4>
+              <p>A compact card uses less padding</p>
+              <span class="badge badge--genre">Compact</span>
+            </article>
+
+          </div>
+        </section>
+
+        <section aria-label="Color palette">
+          <h3>Brand Color Scale (Accent)</h3>
+          <div class="swatch-grid">
+            <div class="swatch" style="--swatch-color: hsl(220,80%,95%)">
+              <span class="swatch-label">100<br>hsl(220,80%,95%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,60%,80%)">
+              <span class="swatch-label">200<br>hsl(220,60%,80%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,50%,60%)">
+              <span class="swatch-label">300<br>hsl(220,50%,60%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,60%,40%)">
+              <span class="swatch-label">400<br>hsl(220,60%,40%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,70%,25%)">
+              <span class="swatch-label">500<br>hsl(220,70%,25%)</span>
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Color schemes">
+          <h3>Color Schemes</h3>
+
+          <h4>Monochrome</h4>
+          <div class="swatch-grid">
+            <div class="swatch" style="--swatch-color: hsl(220,60%,95%)">
+              <span class="swatch-label">100<br>hsl(220,60%,95%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,60%,70%)">
+              <span class="swatch-label">300<br>hsl(220,60%,70%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,60%,45%)">
+              <span class="swatch-label">500<br>hsl(220,60%,45%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(220,60%,25%)">
+              <span class="swatch-label">700<br>hsl(220,60%,25%)</span>
+            </div>
+          </div>
+
+          <h4>Complementary</h4>
+          <div class="swatch-grid">
+            <div class="swatch" style="--swatch-color: hsl(220,60%,50%)">
+              <span class="swatch-label">Blue<br>hsl(220,60%,50%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(40,80%,55%)">
+              <span class="swatch-label">Orange<br>hsl(40,80%,55%)</span>
+            </div>
+          </div>
+
+          <h4>Triad</h4>
+          <div class="swatch-grid">
+            <div class="swatch" style="--swatch-color: hsl(220,60%,50%)">
+              <span class="swatch-label">Blue<br>hsl(220,60%,50%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(340,60%,50%)">
+              <span class="swatch-label">Pink<br>hsl(340,60%,50%)</span>
+            </div>
+            <div class="swatch" style="--swatch-color: hsl(100,60%,40%)">
+              <span class="swatch-label">Green<br>hsl(100,60%,40%)</span>
+            </div>
+          </div>
+        </section>
+
+      </article>
+      <section class="section" aria-label="Magazine layout">
+        <h3>Magazine Layout</h3>
+        <div class="magazine">
+
+          <article class="card magazine__featured">
+            <h4>Featured Story</h4>
+            <p>This card spans two columns on wide screens, giving it visual priority over the others in the grid.</p>
+            <span class="badge badge--genre">Featured</span>
+          </article>
+
+          <article class="card">
+            <h4>Story Two</h4>
+            <p>Regular column width.</p>
+            <span class="badge badge--genre">Movie</span>
+          </article>
+
+          <article class="card">
+            <h4>Story Three</h4>
+            <p>Regular column width.</p>
+            <span class="badge badge--genre">Book</span>
+          </article>
+
+          <article class="card">
+            <h4>Story Four</h4>
+            <p>Regular column width.</p>
+            <span class="badge badge--genre">Movie</span>
+          </article>
+
+        </div>
+      </section>
+      <section class="section" aria-label="Dashboard demo">
+        <h3>Dashboard Layout</h3>
+        <div class="dashboard">
+          <aside class="dashboard__sidebar">
+            <h4>Filters</h4>
+            <ul>
+              <li><a href="#">All Items</a></li>
+              <li><a href="#">Movies</a></li>
+              <li><a href="#">Books</a></li>
+            </ul>
+          </aside>
+          <div class="dashboard__main">
+            <div class="card-grid">
+              <article class="card">
+                <h4>Item One</h4>
+                <p>Main content area with sidebar filter.</p>
+                <span class="badge badge--genre">Movie</span>
+              </article>
+              <article class="card">
+                <h4>Item Two</h4>
+                <p>Cards align properly regardless of content length.</p>
+                <span class="badge badge--genre">Book</span>
+              </article>
+              <article class="card">
+                <h4>Item Three</h4>
+                <p>Short.</p>
+                <span class="badge badge--genre">Movie</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <blockquote>
+        <p>Good design is good business.</p>
+        <cite>— Thomas Watson Jr</cite>
+      </blockquote>
+
+      <pre><code>function changeText() {  document.getElementById("demo").innerHTML = "Text has been changed!"}</code></pre>
+      <p style="font-weight: 400">Regular (400) — body copy</p>
+      <p style="font-weight: 600">Semibold (600) — subheadings</p>
+      <p style="font-weight: 800">Extrabold (800) — hero titles</p>
+
+      <input type="range" min="100" max="900" step="100" value="400" oninput="
+            document.querySelector('.variable-demo').style.fontWeight =
+              this.value
+          " />
+      <p class="variable-demo">Drag to change weight</p>
+
+
+      <section aria-label="Icon showcase">
+        <h3>Icons</h3>
+        <div class="icon-grid">
+          <div class="icon-item">
+            <span class="material-symbols-outlined icon" aria-hidden="true">home</span>
+            <span class="icon-label">Home</span>
+          </div>
+          <div class="icon-item">
+            <span class="material-symbols-outlined icon" aria-hidden="true">settings</span>
+            <span class="icon-label">Settings</span>
+          </div>
+
+          <div class="icon-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="icon" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+
+            <span class="icon-label">Search</span>
+          </div>
+
+          <div class="icon-item">
+            <span class="material-symbols-outlined icon" aria-hidden="true">bookmark</span>
+            <span class="icon-label">Bookmark</span>
+          </div>
+
+          <div class="icon-item">
+            <span class="material-symbols-outlined icon" aria-hidden="true">favorite</span>
+            <span class="icon-label">Favourite</span>
+          </div>
+
+          <div class="icon-item">
+            <span class="material-symbols-outlined icon" aria-hidden="true">share</span>
+            <span class="icon-label">Share</span>
+          </div>
+
+        </div>
+      </section>
+
+      <section aria-label="Image formats">
+        <h3>Image Formats</h3>
+        <figure class="img-figure">
+          <img src="https://picsum.photos/1200/800" alt="A random landscape photograph demonstrating JPG format"
+            width="1200" height="800" class="img-responsive" />
+          <figcaption>JPG are best for photographs with many colors</figcaption>
+        </figure>
+
+        <figure class="img-figure">
+          <img src="assets/images/reading.png" alt="Illustration of a person reading a book" width="200"
+            class="img-responsive" />
+          <figcaption>PNG/SVG — best for illustrations needing transparency</figcaption>
+        </figure>
+
+        <figure class="img-figure">
+          <img src="assets/images/book.svg" alt="Illustration of a person reading a book" width="200"
+            class="img-responsive" />
+          <figcaption>SVG vector logo — scales to any size without quality loss</figcaption>
+        </figure>
+
+      </section>
+      <section aria-label="Loading content" class="section">
+        <h3>Loading State Demo</h3>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton--title"></div>
+          <div class="skeleton skeleton--text"></div>
+          <div class="skeleton skeleton--text skeleton--short"></div>
+          <div class="skeleton skeleton--badge"></div>
+        </div>
+      </section>
+
+      <figure class="img-figure">
+        <picture>
+          <source type="image/webp" srcset="
+        https://picsum.photos/400/267   400w,
+        https://picsum.photos/800/533   800w,
+        https://picsum.photos/1200/800 1200w
+      " sizes="
+        (max-width: 480px) 400px,
+        (max-width: 900px) 800px,
+        1200px
+      " />
+
+          <img src="https://picsum.photos/800/533" alt="A scenic landscape showing responsive image loading" width="800"
+            height="533" class="img-responsive" loading="lazy" decoding="async" />
+
+        </picture>
+        <figcaption>Responsive image — browser picks the right size automatically</figcaption>
+      </figure>
+      <section class="section" aria-label="Features">
+        <h3 class="section__title">Why This Page?</h3>
+        <div class="feature-grid">
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <span class="material-symbols-outlined" aria-hidden="true">bookmark</span>
+            </div>
+            <h4>Curated Lists</h4>
+            <p>Hand-picked movies and books worth your time.</p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+            </div>
+            <h4>Honest Ratings</h4>
+            <p>Real scores from real watchers and readers.</p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <span class="material-symbols-outlined" aria-hidden="true">share</span>
+            </div>
+            <h4>Easy Sharing</h4>
+            <p>Share your favourites with one click.</p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <h3>Quick Facts</h3>
+      <ul>
+        <li>IMDb Top 250 is updated daily.</li>
+        <li>Reading 20 pages a day is 30 books a year.</li>
+      </ul>
+    </aside>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <strong>Movies &amp; Books</strong>
+          <p>A curated collection of stories worth your time.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#movies">Movies</a></li>
+            <li><a href="#books">Books</a></li>
+            <li><a href="#stats">Statistics</a></li>
+          </ul>
+        </nav>
+
+        <div class="footer-meta">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Designer + Developers</p>
+      </div>
+    </footer>
+  </div>
+  <script>
+    const r = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+
+    const saved = localStorage.getItem("theme") ?? "";
+    r.dataset.theme = saved;
+    toggle.textContent = saved === "dark" ? "☀️ Light" : "🌙 Dark";
+
+    toggle.onclick = () => {
+      const next = r.dataset.theme === "dark" ? "" : "dark";
+      r.dataset.theme = next;
+      localStorage.setItem("theme", next);
+      toggle.textContent = next === "dark" ? "☀️ Light" : "🌙 Dark";
+    };
+
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    navToggle.addEventListener('click', () => {
+      const isOpen = navMenu.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+
+</body>
+
+</html>

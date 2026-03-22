@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "modern-normalize": "^3.0.1"
+  },
+  "name": "drills",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
