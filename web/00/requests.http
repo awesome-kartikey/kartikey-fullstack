@@ -1,0 +1,5 @@
+### Get root page
+GET http://localhost:3000
+
+### Get ping
+GET http://localhost:3000/api/ping
