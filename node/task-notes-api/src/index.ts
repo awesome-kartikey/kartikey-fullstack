@@ -1,59 +1,44 @@
-import { loadConfig } from "./config";
-import { TaskServer } from "./server";
-import { logger } from "./logger";
-import { UserDatabase } from "./database";
-import { AuthService } from "./auth/service";
-import { FileStorage } from "./storage";
-import { TaskEventEmitter } from "./events";
+import http from "http";
+import { config } from "./config.js";
+import logger from "./logger.js";
+import { createApp } from "./server.js";
+import { checkDb, closeDb } from "./database.js";
+import { UserRepository } from "./repositories/UserRepository.js";
+import { TaskRepository } from "./repositories/TaskRepository.js";
+import { AuthService } from "./authservice.js";
+import { TaskScheduler } from "./jobs/scheduler.js";
+
 
 async function main() {
-  console.log(">>> Bootstrap sequence starting...");
+  await checkDb();
 
-  const config = loadConfig();
+  const userRepo = new UserRepository();
+  const taskRepo = new TaskRepository();
+  const authService = new AuthService(userRepo);
+  const scheduler = new TaskScheduler();
 
-  // Initialize Dependencies
-  const userDb = new UserDatabase(config.dbPath);
-  const authService = new AuthService(userDb, config.jwtSecret);
-  const storage = new FileStorage(config.dataPath);
-  const events = new TaskEventEmitter();
 
-  // Create Server
-  const server = new TaskServer(config, authService, storage, events, userDb);
+  const app = createApp({ authService, userRepo, taskRepo, scheduler });
+  const server = http.createServer(app);
 
-  // Start Server
-  await server.start();
+  server.listen(config.port, () => {
+    logger.info(`Server running on port ${config.port}`);
+  });
 
-  logger.info(">>> Application is fully initialized and ready.");
-
-  // GRACEFUL SHUTDOWN LOGIC
   const shutdown = async (signal: string) => {
-    console.log(""); // Add a newline after the ^C in terminal
-    logger.info(`[${signal}] Received. Starting graceful shutdown...`);
-
-    try {
-      // 1. Stop Express (stop accepting new requests)
-      await server.stop();
-
-      // 2. Close Database
-      userDb.close();
-      logger.info("Database connection closed.");
-
-      logger.info("Shutdown complete. Goodbye!");
+    logger.info(`${signal} received, shutting down gracefully`);
+    server.close(async () => {
+      await scheduler.close();
+      await closeDb();
       process.exit(0);
-    } catch (err) {
-      logger.error({ err }, "Error during shutdown");
-      process.exit(1);
-    }
+    });
   };
 
-  // Listen for termination signals
   process.on("SIGINT", () => shutdown("SIGINT"));
   process.on("SIGTERM", () => shutdown("SIGTERM"));
 }
 
-// EXECUTE
 main().catch((err) => {
-  console.error("FATAL STARTUP ERROR:", err);
-  logger.error(err);
+  logger.error({ err }, "Fatal startup error");
   process.exit(1);
 });

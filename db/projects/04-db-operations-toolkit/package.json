@@ -1,0 +1,27 @@
+{
+  "name": "04-db-operations-toolkit",
+  "version": "1.0.0",
+  "scripts": {
+    "db:create": "tsx scripts/db-ops.ts create",
+    "db:migrate": "tsx scripts/db-ops.ts migrate",
+    "db:seed": "tsx scripts/db-ops.ts seed",
+    "db:reset": "tsx scripts/db-ops.ts reset",
+    "db:backup": "tsx scripts/db-ops.ts backup",
+    "db:restore": "tsx scripts/db-ops.ts restore",
+    "start": "tsx src/server.ts",
+    "test": "tsx tests/users.test.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.10",
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.11.6",
+    "tsx": "^4.10.0",
+    "typescript": "^5.4.5"
+  }
+}

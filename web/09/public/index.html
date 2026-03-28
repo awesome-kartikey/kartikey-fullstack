@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Load</title>
+    <script src="./render-blocking-1.js"></script>
+    <script src="./render-blocking-2.js"></script>
+</head>
+
+<body>
+    <h1>Dashboard — BEFORE Optimisation</h1>
+
+    <img src="./sakura_flowers.jpg" alt="Sakura">
+
+    <p id="dashboard-output">Loading data...</p>
+
+    <div style="margin-top: 2000px; padding: 20px; background: #f0f0f0;">
+        <h2>Below the fold</h2>
+        <img src="./688-1200x800.jpg" alt="Below fold" id="below-fold" />
+    </div>
+
+
+    <script src="./heavy-bundle.js"></script>
+    <script>
+        fetch("/api/before/dashboard")
+            .then((r) => r.json())
+            .then((data) => {
+                document.getElementById("dashboard-output").textContent =
+                    `User: ${data.user} | Tasks: ${data.tasks} | Notes: ${data.notes}`;
+            });
+    </script>
+</body>
+
+</html>

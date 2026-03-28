@@ -1,88 +1,107 @@
 import { Router } from "express";
 import { nanoid } from "nanoid";
-import { FileStorage } from "../storage";
-import { TaskEventEmitter } from "../events";
-import { CreateTaskSchema, UpdateTaskSchema, Task } from "../models/task";
-import { validateBody } from "../middleware/validate";
-import { requireAuth } from "../middleware/auth";
+import { AuthService } from "../authservice.js";
+import { ensureOwnerOrAdmin, requireAuth, AuthRequest } from "../middleware/auth.js";
+import { validateBody } from "../middleware/validate.js";
+import { CreateTaskSchema, UpdateTaskSchema } from "../models/task.js";
+import { TaskRepository } from "../repositories/TaskRepository.js";
+import { badRequest, notFound } from "../errors.js";
+import logger from "../logger.js";
+import { TaskScheduler } from "../jobs/scheduler.js";
 
 export function createTaskRouter(
-  storage: FileStorage,
-  events: TaskEventEmitter,
+  tasks: TaskRepository, 
+  authService: AuthService, 
+  scheduler: TaskScheduler
 ) {
   const router = Router();
-  // router.use(requireAuth); // Protect all task routes
+  const auth = requireAuth(authService);
 
-  router.get("/", async (req, res) => {
-    const tasks = await storage.loadNotes();
-    // const userTasks = tasks.filter(
-    //   (t) => t.userId === (req as any).user.userId,
-    // );
-    // res.json(userTasks);
-    res.json(tasks);
-  });
+  router.use(auth);
 
-  router.get("/:id", async (req, res) => {
+  router.get("/", async (req, res, next) => {
     try {
-      const tasks = await storage.loadNotes();
-      const task = tasks.find((t) => t.id === req.params.id);
-      if (!task) {
-        res.status(404).json({ error: "Task not found" });
-        return;
-      }
+      const actor = (req as unknown as AuthRequest).user;
+      const result = await tasks.listTasks({
+        actorUserId: actor.userId,
+        actorRole: actor.role,
+        page: Number(req.query.page || 1),
+        limit: Number(req.query.limit || 10),
+        priority: typeof req.query.priority === "string" ? req.query.priority : undefined,
+        completed: typeof req.query.completed === "string" ? req.query.completed : undefined
+      });
+      res.json({ items: result.items });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get("/:id", async (req, res, next) => {
+    try {
+      const actor = (req as unknown as AuthRequest).user;
+      const task = await tasks.getTaskById(req.params.id as string);
+      if (!task) throw notFound("Task not found");
+      ensureOwnerOrAdmin(task.userId, actor);
       res.json(task);
-    } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+    } catch (err) {
+      next(err);
     }
   });
 
-  router.post("/", validateBody(CreateTaskSchema), async (req, res) => {
-    const tasks = await storage.loadNotes();
-    const newTask: Task = {
-      id: nanoid(),
-      // userId: (req as any).user.userId,
-      userId: (req as any).user?.userId || 1,
-      ...req.body,
-      completed: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    tasks.push(newTask);
-    await storage.saveNotes(tasks);
-    events.emitTaskCreated(newTask);
-    res.status(201).json(newTask);
+  router.post("/", validateBody(CreateTaskSchema), async (req, res, next) => {
+    try {
+      const actor = (req as unknown as AuthRequest).user;
+      const task = await tasks.createTask({
+        id: nanoid(),
+        userId: actor.userId,
+        title: req.body.title,
+        description: req.body.description,
+        priority: req.body.priority
+      });
+      
+      logger.info({ taskId: task.id }, "Event: Task Created");
+
+      if (req.body.dueDate) {
+        await scheduler.scheduleReminder(task.id, new Date(req.body.dueDate));
+      }
+
+      res.status(201).json(task);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  // Add PUT and DELETE logic here
-  router.put("/:id", validateBody(UpdateTaskSchema), async (req, res) => {
-    const tasks = await storage.loadNotes();
-    const task = tasks.find((t) => t.id === req.params.id);
-    if (!task) {
-      res.status(404).json({ error: "Task not found" });
-      return;
+  router.put("/:id", validateBody(UpdateTaskSchema), async (req, res, next) => {
+    try {
+      const actor = (req as unknown as AuthRequest).user;
+      const existing = await tasks.getTaskById(req.params.id as string);
+      if (!existing) throw notFound("Task not found");
+      ensureOwnerOrAdmin(existing.userId, actor);
+      
+      const updated = await tasks.updateTask(req.params.id as string, req.body);
+      if (updated) logger.info({ taskId: updated.id }, "Event: Task Updated");
+      
+      res.json(updated);
+    } catch (err) {
+      next(err);
     }
-    const updatedTask: Task = {
-      ...task,
-      ...req.body,
-      updatedAt: new Date().toISOString(),
-    };
-    tasks.splice(tasks.indexOf(task), 1, updatedTask);
-    await storage.saveNotes(tasks);
-    events.emitTaskUpdated(updatedTask);
-    res.json(updatedTask);
   });
 
-  router.delete("/:id", async (req, res) => {
-    const tasks = await storage.loadNotes();
-    const task = tasks.find((t) => t.id === req.params.id);
-    if (!task) {
-      res.status(404).json({ error: "Task not found" });
-      return;
+  router.delete("/:id", async (req, res, next) => {
+    try {
+      const actor = (req as unknown as AuthRequest).user;
+      const existing = await tasks.getTaskById(req.params.id as string);
+      if (!existing) throw notFound("Task not found");
+      ensureOwnerOrAdmin(existing.userId, actor);
+      
+      await tasks.deleteTask(req.params.id as string);
+      logger.info({ taskId: req.params.id }, "Event: Task Deleted");
+      
+      res.status(204).send();
+    } catch (err) {
+      next(err);
     }
-    tasks.splice(tasks.indexOf(task), 1);
-    await storage.saveNotes(tasks);
-    events.emitTaskDeleted(task.id);
-    res.json({ message: "Task deleted successfully" });
   });
+
   return router;
 }

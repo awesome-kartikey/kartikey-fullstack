@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:3000
+
+### Health Check
+GET {{baseUrl}}/health/db
+
+### Create a User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name" : "neon1",
+  "email": "neon1@example.com"
+}
+
+### Get All Users (with pagination)
+GET {{baseUrl}}/users?limit=5&offset=0
+
+### Bulk Insert (Transaction test)
+POST {{baseUrl}}/users/bulk
+Content-Type: application/json
+
+{
+  "emails": ["bob3@example.com", "carol@example.com", "dave@example.com"]
+}
+
+### Test Duplicate (should return 409 Conflict)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name" : "alice",
+  "email": "alice@example.com"
+}

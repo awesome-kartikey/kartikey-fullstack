@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "db:reset": "tsx src/db/run-migrations.ts reset",
+    "db:migrate": "tsx src/db/run-migrations.ts up",
+    "db:seed": "tsx src/db/seed.ts",
+    "start": "tsx src/server.ts",
+    "db:rollback": "tsx src/db/run-migrations.ts down"
+  }
+}

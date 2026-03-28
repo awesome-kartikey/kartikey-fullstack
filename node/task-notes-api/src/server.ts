@@ -1,108 +1,90 @@
-import express, { Express } from "express";
+import express from "express";
+import { nanoid } from "nanoid";
+import path from "path";
 import cors from "cors";
-import pinoHttp from "pino-http";
-import { Server } from "http";
-import { AppConfig } from "./config";
-import { logger } from "./logger";
-import { UserDatabase } from "./database";
-import { AuthService } from "./auth/service";
-import { FileStorage } from "./storage";
-import { TaskEventEmitter } from "./events";
-import { createAuthRouter } from "./routes/auth";
-import { createTaskRouter } from "./routes/tasks";
-import { createUserRouter } from "./routes/users";
-import { HealthChecker } from "./monitoring";
-import { MetricsCollector } from "./metrics";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import { pinoHttp } from "pino-http";
+import { config } from "./config.js";
+import logger from "./logger.js";
+import { errorHandler, notFound } from "./errors.js";
+import { metricsMiddleware, register } from "./metrics.js";
+import { checkDb } from "./database.js";
+import { AuthService } from "./authservice.js";
+import { UserRepository } from "./repositories/UserRepository.js";
+import { TaskRepository } from "./repositories/TaskRepository.js";
+import { createAuthRouter } from "./routes/auth.js";
+import { createUserRouter } from "./routes/users.js";
+import { createTaskRouter } from "./routes/tasks.js";
+import { TaskScheduler } from "./jobs/scheduler.js";
 
-export class TaskServer {
-  private app: Express;
-  private server?: Server;
-  private metrics: MetricsCollector;
 
-  constructor(
-    private config: AppConfig,
-    private authService: AuthService,
-    private storage: FileStorage,
-    private events: TaskEventEmitter,
-    private userDb: UserDatabase, // <--- ADD THIS so the users route can query the DB
-  ) {
-    this.app = express();
-    this.metrics = new MetricsCollector();
-    this.setupApp();
-  }
+export function createApp(deps: {
+  authService: AuthService;
+  userRepo: UserRepository;
+  taskRepo: TaskRepository;
+  scheduler: TaskScheduler;
 
-  private setupApp(): void {
-    // Global Middleware
-    this.app.use(cors());
-    this.app.use(express.json());
-    this.app.use(pinoHttp({ logger }));
+}) {
+  const app = express();
 
-    // Metrics tracking middleware
-    this.app.use((req, res, next) => {
-      const start = Date.now();
-      res.on("finish", () =>
-        this.metrics.recordRequest(req.method, req.path, Date.now() - start),
-      );
-      next();
-    });
+  app.disable("x-powered-by");
+  app.use(helmet());
+  app.use(cors({ origin: config.corsOrigin, credentials: false }));
+  app.use(express.json({ limit: "1mb" }));
+  app.use(
+    pinoHttp({
+      logger: logger as any,
+      genReqId: (req: express.Request) => (req.headers["x-request-id"] as string) || nanoid()
+    })
+  );
+  app.use(metricsMiddleware);
 
-    const health = new HealthChecker();
+  app.use(
+    "/api/auth/login",
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 20
+    })
+  );
 
-    // Health & Metrics (Final API Features)
-    this.app.get("/health", async (req, res) =>
-      res.json(await health.checkHealth()),
-    );
-    this.app.get("/metrics", (req, res) => res.json(this.metrics.getMetrics()));
+  app.get(["/health", "/healthz"], (_req, res) => {
+    res.json({ status: "ok", uptime: process.uptime() });
+  });
 
-    // API Routes
-    this.app.use("/api/auth", createAuthRouter(this.authService));
-    this.app.use("/api/tasks", createTaskRouter(this.storage, this.events));
-    this.app.use("/api/users", createUserRouter(this.userDb)); // <--- ADD THIS
+  app.get("/readyz", async (_req, res) => {
+    try {
+      await checkDb();
+      res.json({ status: "ready" });
+    } catch {
+      res.status(503).json({ status: "not_ready" });
+    }
+  });
 
-    // Global Error Handler
-    this.app.use(
-      (
-        err: any,
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction,
-      ) => {
-        logger.error({ err }, "Unhandled Request Error");
-        this.metrics.recordError(err); // Record the error in metrics
-        res.status(500).json({ error: "Internal Server Error" });
-      },
-    );
-  }
+  app.get("/health/db", async (_req, res) => {
+    try {
+      await checkDb();
+      res.json({ db: "ok" });
+    } catch {
+      res.status(503).json({ db: "down" });
+    }
+  });
 
-  // ... (keep start() and stop() methods the same)
-  async start(): Promise<void> {
-    return new Promise((resolve) => {
-      this.server = this.app.listen(this.config.port, () => {
-        // Use BOTH console and logger for this drill to be 100% sure
-        console.log(`[OK] Server listening on port ${this.config.port}`);
-        logger.info(
-          `Task Notes API running on port ${this.config.port} in ${this.config.env} mode`,
-        );
-        resolve();
-      });
-    });
-  }
-  // Inside src/server.ts
+  app.get("/metrics", async (_req, res) => {
+    res.set("Content-Type", register.contentType);
+    res.end(await register.metrics());
+  });
 
-  async stop(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this.server) {
-        this.server.close((err) => {
-          if (err) {
-            logger.error({ err }, "Error closing Express server");
-            return reject(err);
-          }
-          logger.info("Express server stopped.");
-          resolve();
-        });
-      } else {
-        resolve();
-      }
-    });
-  }
+  app.get("/openapi.json", (_req, res) => {
+    res.sendFile(path.join(process.cwd(), "openapi.json"));
+  });
+
+  app.use("/api/auth", createAuthRouter(deps.authService));
+  app.use("/api/users", createUserRouter(deps.userRepo, deps.authService));
+  app.use("/api/tasks", createTaskRouter(deps.taskRepo, deps.authService, deps.scheduler));
+
+  app.use((_req, _res, next) => next(notFound("Route not found")));
+  app.use(errorHandler);
+
+  return app;
 }

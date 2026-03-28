@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects SSG</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 2rem; background: #f7f7fb; color: #1f2937; }
+    nav { margin: 1rem 0 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    nav a { color: #2563eb; text-decoration: none; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card { background: white; border: 1px solid #d1d5db; border-radius: 12px; padding: 1rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.85rem; background: #e5e7eb; margin-left: 0.5rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/projects">Projects</a>
+    <a href="/articles">Articles</a>
+    <a href="/team">Team</a>
+  </nav>
+
+  <h1>Projects (SSG)</h1>
+  <p>This file was generated ahead of time from data.js.</p>
+
+  <section class="grid">
+    
+    <article class="card">
+      <h3>
+        <a href="/projects/p1">Inventory Redesign</a>
+        <span class="badge">active</span>
+      </h3>
+      <p><strong>Lead:</strong> Ben Okafor</p>
+      <p><strong>Tech:</strong> React, Node</p>
+      <p>Rebuilding the inventory module UI from scratch.</p>
+    </article>
+  
+    <article class="card">
+      <h3>
+        <a href="/projects/p2">Auth Migration</a>
+        <span class="badge">done</span>
+      </h3>
+      <p><strong>Lead:</strong> Alice Nakamura</p>
+      <p><strong>Tech:</strong> TypeScript, JWT</p>
+      <p>Migrated from cookie sessions to signed JWTs.</p>
+    </article>
+  
+    <article class="card">
+      <h3>
+        <a href="/projects/p3">Data Pipeline</a>
+        <span class="badge">planning</span>
+      </h3>
+      <p><strong>Lead:</strong> Carol Singh</p>
+      <p><strong>Tech:</strong> Python, PostgreSQL</p>
+      <p>ETL pipeline for the new reporting dashboard.</p>
+    </article>
+  
+  </section>
+</body>
+</html>

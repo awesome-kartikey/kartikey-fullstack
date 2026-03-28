@@ -1,28 +1,33 @@
-import { Request, Response, NextFunction } from "express";
-import { AuthService } from "../auth/service";
-import { loadConfig } from "../config";
-import { UserDatabase } from "../database";
+import type { NextFunction, Request, Response } from "express";
+import { AuthService, JWTPayload } from "../authservice.js";
+import { forbidden, unauthorized } from "../errors.js";
 
-const config = loadConfig();
-const authService = new AuthService(
-  new UserDatabase(config.dbPath),
-  config.jwtSecret,
-);
+export type AuthRequest = Request & { user: JWTPayload };
 
-export const requireAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  try {
-    (req as any).user = authService.verifyToken(token);
+export function requireAuth(authService: AuthService) {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    try {
+      const header = req.headers.authorization;
+      if (!header?.startsWith("Bearer ")) throw unauthorized("Missing bearer token");
+      const token = header.slice(7);
+      (req as AuthRequest).user = authService.verifyAccess(token);
+      next();
+    } catch (err) {
+      console.error("Auth middleware failure", err);
+      next(unauthorized("Invalid or expired token"));
+    }
+  };
+}
+
+export function requireRole(role: "admin") {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const user = (req as AuthRequest).user;
+    if (!user || user.role !== role) return next(forbidden("Admin role required"));
     next();
-  } catch {
-    res.status(401).json({ error: "Invalid Token" });
-  }
-};
+  };
+}
+
+export function ensureOwnerOrAdmin(ownerId: number, actor: JWTPayload) {
+  if (actor.role === "admin") return;
+  if (actor.userId !== ownerId) throw forbidden("You do not own this task");
+}

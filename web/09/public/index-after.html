@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Load</title>
+    <script src="./render-blocking-1.js" defer></script>
+    <script src="./render-blocking-2.js" defer></script>
+</head>
+
+<body>
+    <h1>Dashboard — AFTER Optimisation</h1>
+
+    <img src="./590-800x600.jpg"
+        srcset="./498-400x300.jpg 400w,
+                ./590-800x600.jpg 800w,
+                ./603-1200x900.jpg 1200w"
+        sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+        alt="Hero Image"
+        width="800"
+        height="600"
+        fetchpriority="high"
+        id="hero" />
+
+
+    <p id="dashboard-output">Loading data...</p>
+
+    <div style="margin-top: 2000px; padding: 20px; background: #f0f0f0;">
+        <h2>Below the fold</h2>
+        <img src="./688-1200x800.jpg" alt="Below fold" id="below-fold" loading="lazy" width="1200" height="800" />
+    </div>
+
+    <script src="./heavy-bundle.js" defer></script>
+    <script>
+        fetch("/api/after/dashboard")
+            .then((r) => r.json())
+            .then((data) => {
+                document.getElementById("dashboard-output").textContent =
+                    `User: ${data.user} | Tasks: ${data.tasks} | Notes: ${data.notes}`;
+            });
+    </script>
+</body>
+
+</html>

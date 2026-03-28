@@ -1,21 +1,39 @@
-export interface MetricsSnapshot {
-  totalRequests: number;
-  errors: number;
-}
+import { Counter, Histogram, Registry, collectDefaultMetrics } from "prom-client";
+import type { NextFunction, Request, Response } from "express";
 
-export class MetricsCollector {
-  private totalRequests = 0;
-  private errors = 0;
+export const register = new Registry();
+collectDefaultMetrics({ register });
 
-  recordRequest(method: string, route: string, duration: number): void {
-    this.totalRequests++;
-  }
+export const httpRequestsTotal = new Counter({
+  name: "http_requests_total",
+  help: "Total HTTP requests",
+  labelNames: ["method", "route", "status_code"],
+  registers: [register]
+});
 
-  recordError(error: Error): void {
-    this.errors++;
-  }
+export const httpRequestDurationMs = new Histogram({
+  name: "http_request_duration_ms",
+  help: "HTTP request duration in ms",
+  labelNames: ["method", "route", "status_code"],
+  buckets: [5, 15, 50, 100, 250, 500, 1000, 2000],
+  registers: [register]
+});
 
-  getMetrics(): MetricsSnapshot {
-    return { totalRequests: this.totalRequests, errors: this.errors };
-  }
+export const httpErrorsTotal = new Counter({
+  name: "http_errors_total",
+  help: "Total HTTP errors",
+  labelNames: ["method", "route", "status_code"],
+  registers: [register]
+});
+
+export function metricsMiddleware(req: Request, res: Response, next: NextFunction) {
+  const start = Date.now();
+  res.on("finish", () => {
+    const route = req.route?.path || req.path || "unknown";
+    const status = String(res.statusCode);
+    httpRequestsTotal.inc({ method: req.method, route, status_code: status });
+    httpRequestDurationMs.observe({ method: req.method, route, status_code: status }, Date.now() - start);
+    if (res.statusCode >= 400) httpErrorsTotal.inc({ method: req.method, route, status_code: status });
+  });
+  next();
 }

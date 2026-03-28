@@ -1,3 +1,5 @@
+import { checkDb } from "./database.js";
+
 export interface HealthStatus {
   status: string;
   uptime: number;
@@ -12,6 +14,11 @@ export class HealthChecker {
     return { status: "ok", uptime: process.uptime() };
   }
   async checkDependencies(): Promise<ServiceStatus[]> {
-    return [{ name: "sqlite", status: "up" }]; // Mocked for now
+    try {
+      await checkDb();
+      return [{ name: "postgres", status: "up" }];
+    } catch {
+      return [{ name: "postgres", status: "down" }];
+    }
   }
 }

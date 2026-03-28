@@ -1,0 +1,10 @@
+@baseUrl = http://localhost:3000
+
+### Health Check
+GET {{baseUrl}}/admin/db-status
+
+### Database Metrics
+GET {{baseUrl}}/admin/metrics
+
+### Get Users (increments totalQueries counter)
+GET {{baseUrl}}/api/users

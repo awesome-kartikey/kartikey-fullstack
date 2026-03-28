@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>HTTP Practice</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        #result {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f4f4f4;
+            border-radius: 4px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>User Lookup</h1>
+    <button id="loadUser">Load User 1</button>
+    <div id="result">Click the button.</div>
+
+    <script>
+        const btn = document.getElementById('loadUser');
+        const resultDiv = document.getElementById('result');
+
+        btn.addEventListener('click', async () => {
+            resultDiv.textContent = 'Loading...';
+            resultDiv.className = '';
+
+            try {
+                const response = await fetch('/users/1');
+
+                const contentType = response.headers.get('Content-Type');
+
+                if (!response.ok || !contentType?.includes('application/json')) {
+                    throw new Error(`HTTP ${response.status} or invalid content type`);
+                }
+
+                const user = await response.json();
+                resultDiv.textContent = `Name: ${user.name} | Role: ${user.role}`;
+            } catch (err) {
+                resultDiv.textContent = `Error: ${err.message}`;
+                resultDiv.className = 'error';
+            }
+        });
+        fetch('http://localhost:3000/health')
+            .then(r => r.json())
+            .then(console.log)
+            .catch(console.error);
+    </script>
+</body>
+
+</html>

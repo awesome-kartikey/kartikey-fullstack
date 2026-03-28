@@ -1,5 +1,5 @@
 import { Job } from "bullmq";
-import { logger } from "../logger";
+import logger from "../logger.js";
 
 export const reminderHandler = async (job: Job) => {
   logger.info(`Sending reminder for task: ${job.data.taskId}`);

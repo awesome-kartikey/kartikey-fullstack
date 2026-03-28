@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Task Notes API",
+    "version": "1.0.0",
+    "description": "Production API for Task Notes application"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": { "description": "OK" }
+        }
+      }
+    },
+    "/readyz": {
+      "get": {
+        "summary": "Readiness check",
+        "responses": {
+          "200": { "description": "Ready" },
+          "503": { "description": "Not Ready" }
+        }
+      }
+    },
+    "/health/db": {
+      "get": {
+        "summary": "Database check",
+        "responses": {
+          "200": { "description": "DB OK" },
+          "503": { "description": "DB Down" }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "summary": "Prometheus metrics",
+        "responses": {
+          "200": { "description": "Metrics" }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "summary": "List tasks",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "post": {
+        "summary": "Create task",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Created" }
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "summary": "Get profile",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    }
+  }
+}

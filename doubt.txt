@@ -1,0 +1,81 @@
+
+Is database schema design always the first step when building an application, or can it change later as the business logic becomes clearer?
+How do we decide whether to use SQL or NoSQL for an application today, especially when NoSQL databases can also handle relationships and SQL databases can store flexible JSON data?
+Is Prometheus actually a database, or is it just a tool that stores metrics? Also, how are time-series databases different from SQL, NoSQL, or Redis?
+If most databases follow a similar overall architecture, then what are the main things that actually make PostgreSQL, MongoDB, Cassandra, Redis, and others different from each other?
+
+## 🌗 Flash of Unstyled Content (FOUC) in Dark Mode
+
+When you implement dark mode (or any theme switch) in **Next.js**, you might notice a quick flicker when the page loads.
+
+### ❓ Why does this happen?
+
+* Next.js first renders the page on the **server (SSR)**.
+* The server **doesn’t know the user’s theme preference** (dark/light).
+* When the page loads in the browser, JavaScript runs and:
+
+  * Checks **localStorage** or system settings
+  * Applies the correct theme
+
+👉 This delay causes a **flash of wrong styles** (usually light mode before switching to dark).
+
+---
+
+## ✅ How to Fix It
+
+### 1. Use `next-themes` (Recommended)
+
+The next-themes library solves this automatically.
+
+* It injects a small script in the `<head>`
+* Applies the correct theme **before React renders**
+
+👉 Result: **No flicker**
+
+---
+
+### 2. Add a Script in `<head>` (Custom Solution)
+
+You can manually fix this by adding a small script:
+
+* Read theme from **localStorage or cookies**
+* Immediately add a class like `dark` to `<html>`
+
+👉 This ensures styles are applied **before the page is visible**
+
+---
+
+### 3. Set Background Color in CSS
+
+A simple fallback:
+
+```css
+html {
+  background-color: black; /* for dark mode */
+}
+```
+
+* Prevents a white flash
+* Useful as a quick fix
+
+---
+
+### 4. Use Cookies for Theme Storage
+
+Instead of localStorage:
+
+* Save theme in a **cookie**
+* Server reads it during request
+* Applies correct theme on first render
+
+👉 Best for **SSR-friendly theming**
+
+---
+
+## 🧠 Simple Summary
+
+* FOUC happens because **server doesn’t know user theme**
+* Fix it by applying theme **before UI renders**
+* Best solution: **`next-themes` or inline script in `<head>`**
+
+---

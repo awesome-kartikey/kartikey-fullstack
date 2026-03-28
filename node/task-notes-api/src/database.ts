@@ -1,52 +1,31 @@
-import DatabaseConstructor, { Database } from "better-sqlite3";
-import path from "path";
-import fs from "fs";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
+import * as schema from "./db/schema.js";
+import { config } from "./config.js";
+import logger from "./logger.js";
 
-export interface User {
-  id: number;
-  email: string;
-  password_hash: string;
-  role: "user" | "admin";
-  created_at: string;
+export const pool = new Pool({
+  connectionString: config.databaseUrl,
+  max: config.env === "test" ? 2 : 10,
+  idleTimeoutMillis: 10000
+});
+
+pool.on("error", (err) => {
+  logger.error({ err }, "Postgres pool error");
+});
+
+export const db = drizzle(pool, { schema, logger: config.logLevel === "debug" });
+
+export async function checkDb() {
+  await db.execute('SELECT 1');
 }
 
-export class UserDatabase {
-  private db: Database;
+export async function closeDb() {
+  await pool.end();
+}
 
-  constructor(dbPath: string) {
-    const dir = path.dirname(dbPath);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    this.db = new DatabaseConstructor(dbPath);
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        role TEXT DEFAULT 'user',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-  }
+type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
-  createUser(email: string, passwordHash: string, role: string = "user"): User {
-    const stmt = this.db.prepare(
-      "INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)",
-    );
-    const info = stmt.run(email, passwordHash, role);
-    return this.getUserById(info.lastInsertRowid as number)!;
-  }
-
-  getUserByEmail(email: string): User | null {
-    const stmt = this.db.prepare("SELECT * FROM users WHERE email = ?");
-    return (stmt.get(email) as User) || null;
-  }
-
-  getUserById(id: number): User | null {
-    const stmt = this.db.prepare("SELECT * FROM users WHERE id = ?");
-    return (stmt.get(id) as User) || null;
-  }
-  close(): void {
-    // better-sqlite3 close() is synchronous
-    this.db.close();
-  }
+export async function withTransaction<T>(fn: (tx: DbTransaction) => Promise<T>): Promise<T> {
+  return await db.transaction(fn);
 }

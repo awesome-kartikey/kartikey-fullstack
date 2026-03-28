@@ -1,22 +1,19 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export interface AppConfig {
-  port: number;
-  logLevel: string;
-  env: "development" | "production" | "test";
-  jwtSecret: string;
-  dataPath: string;
-  dbPath: string;
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) throw new Error(`Missing required env var: ${name}`);
+  return value;
 }
 
-export function loadConfig(): AppConfig {
-  return {
-    port: parseInt(process.env.PORT || "3000", 10),
-    logLevel: process.env.LOG_LEVEL || "info",
-    env: (process.env.NODE_ENV as any) || "development",
-    jwtSecret: process.env.JWT_SECRET || "super-secret-key",
-    dataPath: process.env.DATA_PATH || "./data/tasks.json",
-    dbPath: process.env.DB_PATH || "./data/users.db",
-  };
-}
+export const config = {
+  env: process.env.NODE_ENV || "development",
+  port: Number(process.env.PORT || 3000),
+  logLevel: process.env.LOG_LEVEL || "info",
+  jwtSecret: requireEnv("JWT_SECRET"),
+  jwtRefreshSecret: requireEnv("JWT_REFRESH_SECRET"),
+  databaseUrl: requireEnv("DATABASE_URL"),
+  redisUrl: process.env.REDIS_URL,
+  corsOrigin: process.env.CORS_ORIGIN || "http://localhost:3000"
+};
